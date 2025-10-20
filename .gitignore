@@ -1,0 +1,26 @@
+# Environment variables
+.env
+
+# Rust build artifacts
+/target
+Cargo.lock
+
+# Frontend
+web/node_modules/
+web/dist/
+web/.vite/
+web/.tanstack/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Bacon
+bacon.toml
+
+# Temporary cloned repos
+banner/
