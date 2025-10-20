@@ -5,11 +5,28 @@ use once_cell::sync::Lazy;
 use std::collections::HashMap;
 use std::hash::{Hash, Hasher, DefaultHasher};
 
-/// Embedded web assets
+/// Embedded web assets (only in release mode)
+#[cfg(not(debug_assertions))]
 #[derive(rust_embed::Embed)]
 #[folder = "web/dist"]
 #[include = "**/*"]
 pub struct WebAssets;
+
+/// Dummy struct for development mode where assets aren't embedded
+#[cfg(debug_assertions)]
+pub struct WebAssets;
+
+#[cfg(debug_assertions)]
+impl WebAssets {
+    pub fn get(_path: &str) -> Option<EmbeddedFile> {
+        None
+    }
+}
+
+#[cfg(debug_assertions)]
+pub struct EmbeddedFile {
+    pub data: Vec<u8>,
+}
 
 /// Metadata for cached assets including MIME type and hash
 #[derive(Clone)]

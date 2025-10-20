@@ -41,6 +41,7 @@ export default defineConfig({
       "@": resolve(__dirname, "./src"),
     },
   },
+  clearScreen: false,
   server: {
     port: 3000,
     proxy: {
