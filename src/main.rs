@@ -1,16 +1,19 @@
-use figment::{Figment, providers::{Env, Format, Toml}};
+use figment::{
+    providers::{Env, Format, Toml},
+    Figment,
+};
 use sqlx::postgres::PgPoolOptions;
 use std::net::SocketAddr;
 use std::process::ExitCode;
 use tokio::net::TcpListener;
-use tracing::{info, error};
+use tracing::{error, info};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 mod config;
 mod web;
 
 use config::Config;
-use web::{AppState, create_router};
+use web::{create_router, AppState};
 
 #[tokio::main]
 async fn main() -> ExitCode {
@@ -33,8 +36,14 @@ async fn main() -> ExitCode {
     // Setup logging
     tracing_subscriber::registry()
         .with(
-            tracing_subscriber::EnvFilter::try_from_default_env()
-                .unwrap_or_else(|_| format!("{}={}", env!("CARGO_PKG_NAME").replace('-', "_"), config.log_level).into()),
+            tracing_subscriber::EnvFilter::try_from_default_env().unwrap_or_else(|_| {
+                format!(
+                    "{}={}",
+                    env!("CARGO_PKG_NAME").replace('-', "_"),
+                    config.log_level
+                )
+                .into()
+            }),
         )
         .with(tracing_subscriber::fmt::layer())
         .init();
@@ -62,7 +71,7 @@ async fn main() -> ExitCode {
     };
 
     // Run migrations
-    if let Err(e) = sqlx::migrate!("./migrations").run(&db).await {
+    if let Err(e) = sqlx::migrate!().run(&db).await {
         error!("failed to run migrations: {}", e);
         return ExitCode::FAILURE;
     }
