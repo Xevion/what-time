@@ -1,5 +1,5 @@
 # Build arguments
-ARG RUST_VERSION=1.83.0
+ARG RUST_VERSION=1.90.0
 ARG RAILWAY_GIT_COMMIT_SHA
 
 # Frontend Build Stage
