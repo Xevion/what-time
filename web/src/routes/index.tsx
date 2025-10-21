@@ -44,7 +44,7 @@ function Index() {
 	};
 
 	return (
-		<div className="h-screen w-screen flex flex-col overflow-hidden items-center pt-12 px-8">
+		<div className="h-dvh w-screen flex flex-col overflow-hidden items-center pt-12 px-8">
 			<div className="w-full max-w-5xl flex flex-col h-full">
 				<Box
 					mb="4"
