@@ -1,5 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState, type CSSProperties } from "react";
+import {
+	useMemo,
+	useState,
+	useEffect,
+	useRef,
+	type CSSProperties,
+} from "react";
 import { Box } from "@radix-ui/themes";
 import { TimeGrid } from "../components/TimeGrid";
 
@@ -9,7 +15,7 @@ export const Route = createFileRoute("/")({
 
 const EVENT_NAME_INPUT_STYLE: CSSProperties = {
 	width: "100%",
-	fontSize: "48px",
+	fontSize: "clamp(24px, 5vw, 48px)",
 	fontWeight: "600",
 	border: "none",
 	outline: "none",
@@ -24,6 +30,8 @@ function Index() {
 	const [_selections, setSelections] = useState<Map<string, number[]>>(
 		new Map(),
 	);
+	const [usePadding, setUsePadding] = useState(true);
+	const containerRef = useRef<HTMLDivElement>(null);
 
 	// Generate dates for yesterday, today, and tomorrow (memoized to prevent recreation)
 	const dates = useMemo(() => {
@@ -43,11 +51,61 @@ function Index() {
 		setSelections(selections);
 	};
 
+	// Smart padding logic with hysteresis to prevent flickering
+	useEffect(() => {
+		const container = containerRef.current;
+		if (!container) return;
+
+		const PADDING_TOTAL = 64; // 32px on each side (2rem)
+		const BUFFER_ZONE = 100; // Hysteresis buffer to prevent flickering
+
+		const updatePadding = () => {
+			const containerWidth = container.offsetWidth;
+			// Calculate responsive column width: clamp(150px, 20vw, 250px)
+			const viewportWidth = window.innerWidth;
+			const columnWidth = Math.max(150, Math.min(viewportWidth * 0.2, 250));
+			const contentWidth = dates.length * columnWidth;
+
+			// Hysteresis logic:
+			// - When padding is OFF, only enable if there's extra room (buffer)
+			// - When padding is ON, only disable if content clearly overflows
+			if (usePadding) {
+				// Currently padded - remove padding only if content + padding overflows
+				if (contentWidth + PADDING_TOTAL > containerWidth) {
+					setUsePadding(false);
+				}
+			} else {
+				// Currently unpadded - add padding only if content + padding + buffer fits
+				if (
+					contentWidth + PADDING_TOTAL + BUFFER_ZONE <
+					containerWidth
+				) {
+					setUsePadding(true);
+				}
+			}
+		};
+
+		// Initial check
+		updatePadding();
+
+		// Set up ResizeObserver to monitor container width changes
+		const resizeObserver = new ResizeObserver(() => {
+			updatePadding();
+		});
+
+		resizeObserver.observe(container);
+
+		return () => {
+			resizeObserver.disconnect();
+		};
+	}, [dates.length, usePadding]);
+
 	return (
-		<div className="h-dvh w-screen flex flex-col overflow-hidden items-center pt-12 px-8">
-			<div className="w-full max-w-5xl flex flex-col h-full">
+		<div className="h-dvh w-screen flex flex-col overflow-hidden items-center pt-12">
+			<div ref={containerRef} className="w-full flex flex-col h-full">
 				<Box
 					mb="4"
+					px="8"
 					style={{
 						flexShrink: 0,
 					}}
@@ -62,7 +120,9 @@ function Index() {
 					/>
 				</Box>
 
-				<div className="flex-1 min-h-0">
+				<div
+					className={`shrink min-h-0 xl:px-8 ${usePadding ? "px-8" : ""}`}
+				>
 					<TimeGrid
 						dates={dates}
 						onSelectionChange={handleSelectionChange}
