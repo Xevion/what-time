@@ -53,3 +53,14 @@ dev-build *ARGS='--tracing pretty': build-frontend
 # Auto-reloading development build for both frontend and backend
 [parallel]
 dev *ARGS='': frontend (backend ARGS)
+
+# Check backend with clippy
+check-backend:
+    cargo clippy --all-targets
+
+# Check frontend with TypeScript and ESLint
+check-frontend:
+    pnpm run -C web check
+
+# Check both backend and frontend
+check: check-backend check-frontend

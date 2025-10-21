@@ -7,28 +7,37 @@
 		"dev": "vite --port 3000",
 		"start": "vite --port 3000",
 		"build": "vite build && tsc",
-		"serve": "vite preview"
+		"serve": "vite preview",
+		"typecheck": "tsc --noEmit",
+		"lint": "eslint . --max-warnings 0",
+		"check": "pnpm typecheck && pnpm lint"
 	},
 	"dependencies": {
 		"@fontsource-variable/inter": "^5.2.8",
 		"@radix-ui/themes": "^3.2.1",
 		"@tailwindcss/vite": "^4.1.15",
-		"@tanstack/react-router": "^1.130.2",
-		"@tanstack/react-router-devtools": "^1.131.5",
-		"@tanstack/router-plugin": "^1.121.2",
+		"@tanstack/react-router": "^1.133.20",
+		"@tanstack/react-router-devtools": "^1.133.20",
+		"@tanstack/router-plugin": "^1.133.20",
 		"lucide-react": "^0.546.0",
 		"overlayscrollbars": "^2.12.0",
 		"overlayscrollbars-react": "^0.5.6",
-		"react": "^19.0.0",
-		"react-dom": "^19.0.0",
+		"react": "^19.2.0",
+		"react-dom": "^19.2.0",
 		"tailwindcss": "^4.1.15"
 	},
 	"devDependencies": {
-		"@types/node": "^24.3.3",
-		"@types/react": "^19.0.8",
-		"@types/react-dom": "^19.0.3",
-		"@vitejs/plugin-react": "^4.3.4",
-		"typescript": "^5.7.2",
-		"vite": "^6.3.5"
+		"@types/node": "^24.9.1",
+		"@types/react": "^19.2.2",
+		"@types/react-dom": "^19.2.2",
+		"@typescript-eslint/eslint-plugin": "^8.46.2",
+		"@typescript-eslint/parser": "^8.46.2",
+		"@vitejs/plugin-react": "^4.7.0",
+		"browserslist": "^4.26.3",
+		"eslint": "^9.38.0",
+		"eslint-plugin-react": "^7.37.5",
+		"eslint-plugin-react-hooks": "^7.0.0",
+		"typescript": "^5.9.3",
+		"vite": "^6.4.1"
 	}
 }

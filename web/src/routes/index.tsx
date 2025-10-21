@@ -21,7 +21,7 @@ const EVENT_NAME_INPUT_STYLE: CSSProperties = {
 
 function Index() {
 	const [eventName, setEventName] = useState("");
-	const [selections, setSelections] = useState<Map<string, number[]>>(
+	const [_selections, setSelections] = useState<Map<string, number[]>>(
 		new Map(),
 	);
 

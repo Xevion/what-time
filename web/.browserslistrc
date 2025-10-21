@@ -1,0 +1,12 @@
+# Extended modern browser support
+# Covers browsers from the last 3 years with good market share
+# Used by PostCSS, Autoprefixer, and other build tools
+
+# Browsers with >0.2% market share from the last 3 years
+>0.2% and last 3 years
+
+# Exclude browsers without official support
+not dead
+
+# Exclude Opera Mini (limited JavaScript support)
+not op_mini all

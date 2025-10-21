@@ -137,7 +137,7 @@ export function TimeGridColumn({
 	const [dragPreviewBlocks, setDragPreviewBlocks] = useState<Set<number>>(
 		new Set(),
 	);
-	const [isTouchSelecting, setIsTouchSelecting] = useState(false);
+	const [_isTouchSelecting, setIsTouchSelecting] = useState(false);
 
 	const dragStartIndex = useRef<number | null>(null);
 	const hasDragged = useRef(false);
